@@ -28,6 +28,17 @@ export default function Admin() {
     enabled: !auth.isAuthenticated,
   });
 
+  // Fetch analytics data
+  const { data: analytics = { totalProducts: 0, totalOrders: 0, pendingOrders: 0, totalRevenue: 0 } } = useQuery<{
+    totalProducts: number;
+    totalOrders: number;
+    pendingOrders: number;
+    totalRevenue: number;
+  }>({
+    queryKey: ["/api/admin/analytics"],
+    enabled: auth.isAuthenticated,
+  });
+
   useEffect(() => {
     if (adminProfile) {
       setAuth({ isAuthenticated: true, admin: adminProfile as { id: string; email: string } });
@@ -176,7 +187,7 @@ export default function Admin() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-blue-200 text-sm">Total Produits</p>
-                  <p className="text-3xl font-bold" data-testid="text-stat-products">0</p>
+                  <p className="text-3xl font-bold" data-testid="text-stat-products">{analytics.totalProducts}</p>
                 </div>
                 <Package className="h-8 w-8 text-blue-200" />
               </div>
@@ -188,7 +199,7 @@ export default function Admin() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-green-200 text-sm">Commandes</p>
-                  <p className="text-3xl font-bold" data-testid="text-stat-orders">0</p>
+                  <p className="text-3xl font-bold" data-testid="text-stat-orders">{analytics.totalOrders}</p>
                 </div>
                 <ShoppingCart className="h-8 w-8 text-green-200" />
               </div>
@@ -200,7 +211,7 @@ export default function Admin() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-orange-200 text-sm">Revenus</p>
-                  <p className="text-3xl font-bold" data-testid="text-stat-revenue">0 DA</p>
+                  <p className="text-3xl font-bold" data-testid="text-stat-revenue">{analytics.totalRevenue.toLocaleString()} DA</p>
                 </div>
                 <TrendingUp className="h-8 w-8 text-orange-200" />
               </div>
@@ -212,7 +223,7 @@ export default function Admin() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-purple-200 text-sm">En attente</p>
-                  <p className="text-3xl font-bold" data-testid="text-stat-pending">0</p>
+                  <p className="text-3xl font-bold" data-testid="text-stat-pending">{analytics.pendingOrders}</p>
                 </div>
                 <Clock className="h-8 w-8 text-purple-200" />
               </div>

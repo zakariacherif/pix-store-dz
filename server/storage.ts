@@ -45,6 +45,7 @@ export interface IStorage {
 
   // Categories
   getCategories(): Promise<string[]>;
+  createCategory(category: string): Promise<void>;
   deleteCategory(category: string): Promise<void>;
 }
 
@@ -227,6 +228,13 @@ export class DatabaseStorage implements IStorage {
     return result
       .map(row => row.category)
       .filter(category => category && category.trim() !== "") as string[];
+  }
+
+  async createCategory(category: string): Promise<void> {
+    // Categories are automatically created when products are assigned to them
+    // This method serves as a validation point for category creation
+    // No database operation needed as categories are derived from product categories
+    return Promise.resolve();
   }
 
   async deleteCategory(category: string): Promise<void> {

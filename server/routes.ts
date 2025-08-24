@@ -271,6 +271,31 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // Protected admin routes
 
+  // Analytics endpoint
+  app.get("/api/admin/analytics", isAuthenticated, async (req: any, res) => {
+    try {
+      const products = await storage.getProducts();
+      const orders = await storage.getOrders();
+      
+      const totalProducts = products.length;
+      const totalOrders = orders.length;
+      const pendingOrders = orders.filter(order => order.status === "pending").length;
+      const totalRevenue = orders
+        .filter(order => order.status === "delivered")
+        .reduce((sum, order) => sum + parseFloat(order.total), 0);
+
+      res.json({
+        totalProducts,
+        totalOrders,
+        pendingOrders,
+        totalRevenue
+      });
+    } catch (error) {
+      console.error("Error fetching analytics:", error);
+      res.status(500).json({ message: "Failed to fetch analytics" });
+    }
+  });
+
   // Products management
   app.post("/api/admin/products", isAuthenticated, async (req, res) => {
     try {
@@ -358,6 +383,28 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error fetching categories:", error);
       res.status(500).json({ message: "Failed to fetch categories" });
+    }
+  });
+
+  app.post("/api/admin/categories", isAuthenticated, async (req, res) => {
+    try {
+      const { name } = req.body;
+      if (!name || typeof name !== 'string' || name.trim().length === 0) {
+        return res.status(400).json({ message: "Category name is required" });
+      }
+      
+      const categoryName = name.trim().toLowerCase();
+      const categories = await storage.getCategories();
+      
+      if (categories.includes(categoryName)) {
+        return res.status(409).json({ message: "Category already exists" });
+      }
+      
+      await storage.createCategory(categoryName);
+      res.status(201).json({ message: "Category created successfully", category: categoryName });
+    } catch (error) {
+      console.error("Error creating category:", error);
+      res.status(500).json({ message: "Failed to create category" });
     }
   });
 

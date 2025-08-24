@@ -60,14 +60,6 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
           </Badge>
         )}
         
-        <Button
-          variant="ghost"
-          size="sm"
-          className="absolute top-4 right-4 bg-white text-gray-600 hover:text-red-500 p-2 rounded-full shadow-md opacity-0 group-hover:opacity-100 transition-opacity"
-          data-testid={`button-favorite-${product.id}`}
-        >
-          <Heart className="h-4 w-4" />
-        </Button>
       </div>
       
       <CardContent className="p-6">
