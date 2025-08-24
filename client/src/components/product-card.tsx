@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ShoppingCart, Heart, Check } from "lucide-react";
 import { Product } from "@shared/schema";
+import { Link } from "wouter";
 
 interface ProductCardProps {
   product: Product;
@@ -28,10 +29,11 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
   const isOutOfStock = product.stock !== null && product.stock <= 0;
 
   return (
-    <Card 
-      className="bg-white rounded-xl shadow-md hover:shadow-xl transition-shadow overflow-hidden group"
-      data-testid={`card-product-${product.id}`}
-    >
+    <Link href={`/product/${product.id}`}>
+      <Card 
+        className="bg-white rounded-xl shadow-md hover:shadow-xl transition-shadow overflow-hidden group cursor-pointer"
+        data-testid={`card-product-${product.id}`}
+      >
       <div className="relative overflow-hidden">
         <div className={`w-full h-64 bg-gray-200 ${!isImageLoaded ? 'animate-pulse' : ''}`}>
           <img
@@ -121,5 +123,6 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
         )}
       </CardContent>
     </Card>
+    </Link>
   );
 }

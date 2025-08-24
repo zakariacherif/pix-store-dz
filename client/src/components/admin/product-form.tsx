@@ -11,7 +11,7 @@ import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
-import { Plus, Edit, Trash2, Package } from "lucide-react";
+import { Plus, Edit, Trash2, Package, X, ImageIcon } from "lucide-react";
 import { Product, InsertProduct } from "@shared/schema";
 
 export default function ProductForm() {
@@ -24,9 +24,15 @@ export default function ProductForm() {
     description: "",
     price: "",
     imageUrl: "",
+    images: [],
+    sizes: [],
+    colors: [],
     stock: 0,
     category: "",
   });
+  const [newImageUrl, setNewImageUrl] = useState("");
+  const [newSize, setNewSize] = useState("");
+  const [newColor, setNewColor] = useState("");
 
   const { data: products = [], isLoading } = useQuery<Product[]>({
     queryKey: ["/api/products"],
@@ -114,6 +120,9 @@ export default function ProductForm() {
       description: product.description || "",
       price: product.price,
       imageUrl: product.imageUrl,
+      images: product.images || [],
+      sizes: product.sizes || [],
+      colors: product.colors || [],
       stock: product.stock || 0,
       category: product.category || "",
     });
@@ -134,9 +143,15 @@ export default function ProductForm() {
       description: "",
       price: "",
       imageUrl: "",
+      images: [],
+      sizes: [],
+      colors: [],
       stock: 0,
       category: "",
     });
+    setNewImageUrl("");
+    setNewSize("");
+    setNewColor("");
   };
 
   const formatPrice = (price: string) => {
@@ -247,7 +262,7 @@ export default function ProductForm() {
 
       {/* Product Form Modal */}
       <Dialog open={isModalOpen} onOpenChange={handleCloseModal}>
-        <DialogContent className="max-w-lg" data-testid="modal-product-form">
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto" data-testid="modal-product-form">
           <DialogHeader>
             <DialogTitle data-testid="text-modal-title">
               {editingProduct ? "Modifier le produit" : "Ajouter un produit"}
@@ -271,7 +286,7 @@ export default function ProductForm() {
               <Label htmlFor="description">Description</Label>
               <Textarea
                 id="description"
-                value={formData.description}
+                value={formData.description || ""}
                 onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
                 className="mt-1"
                 rows={3}
@@ -286,7 +301,7 @@ export default function ProductForm() {
                 type="number"
                 step="0.01"
                 required
-                value={formData.price}
+                value={formData.price || ""}
                 onChange={(e) => setFormData(prev => ({ ...prev, price: e.target.value }))}
                 className="mt-1"
                 data-testid="input-product-price"
@@ -310,19 +325,196 @@ export default function ProductForm() {
             <div>
               <Label htmlFor="category">Catégorie</Label>
               <Select
-                value={formData.category}
+                value={formData.category || ""}
                 onValueChange={(value) => setFormData(prev => ({ ...prev, category: value }))}
               >
                 <SelectTrigger className="mt-1" data-testid="select-product-category">
                   <SelectValue placeholder="Sélectionner une catégorie" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="homme">Homme</SelectItem>
-                  <SelectItem value="femme">Femme</SelectItem>
-                  <SelectItem value="nouveau">Nouveau</SelectItem>
-                  <SelectItem value="sport">Sport</SelectItem>
+                  <SelectItem value="home">Home</SelectItem>
                 </SelectContent>
               </Select>
+            </div>
+
+            {/* Additional Images */}
+            <div>
+              <Label>Images supplémentaires</Label>
+              <div className="mt-2 space-y-2">
+                <div className="flex space-x-2">
+                  <Input
+                    placeholder="URL de l'image"
+                    value={newImageUrl}
+                    onChange={(e) => setNewImageUrl(e.target.value)}
+                    data-testid="input-new-image"
+                  />
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => {
+                      if (newImageUrl.trim()) {
+                        setFormData(prev => ({
+                          ...prev,
+                          images: [...(prev.images || []), newImageUrl.trim()]
+                        }));
+                        setNewImageUrl("");
+                      }
+                    }}
+                    data-testid="button-add-image"
+                  >
+                    <Plus className="h-4 w-4" />
+                  </Button>
+                </div>
+                {formData.images && formData.images.length > 0 && (
+                  <div className="grid grid-cols-2 gap-2" data-testid="list-images">
+                    {formData.images.map((image, index) => (
+                      <div key={index} className="relative group border rounded-lg p-2">
+                        <img
+                          src={image}
+                          alt={`Image ${index + 1}`}
+                          className="w-full h-20 object-cover rounded"
+                        />
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="sm"
+                          className="absolute top-1 right-1 p-1 bg-red-500 text-white hover:bg-red-600 opacity-0 group-hover:opacity-100 transition-opacity"
+                          onClick={() => {
+                            setFormData(prev => ({
+                              ...prev,
+                              images: prev.images?.filter((_, i) => i !== index) || []
+                            }));
+                          }}
+                          data-testid={`button-remove-image-${index}`}
+                        >
+                          <X className="h-3 w-3" />
+                        </Button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Sizes */}
+            <div>
+              <Label>Tailles disponibles</Label>
+              <div className="mt-2 space-y-2">
+                <div className="flex space-x-2">
+                  <Select value={newSize} onValueChange={setNewSize}>
+                    <SelectTrigger data-testid="select-new-size">
+                      <SelectValue placeholder="Sélectionner une taille" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="XS">XS</SelectItem>
+                      <SelectItem value="S">S</SelectItem>
+                      <SelectItem value="M">M</SelectItem>
+                      <SelectItem value="L">L</SelectItem>
+                      <SelectItem value="XL">XL</SelectItem>
+                      <SelectItem value="XXL">XXL</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => {
+                      if (newSize && !formData.sizes?.includes(newSize)) {
+                        setFormData(prev => ({
+                          ...prev,
+                          sizes: [...(prev.sizes || []), newSize]
+                        }));
+                        setNewSize("");
+                      }
+                    }}
+                    data-testid="button-add-size"
+                  >
+                    <Plus className="h-4 w-4" />
+                  </Button>
+                </div>
+                {formData.sizes && formData.sizes.length > 0 && (
+                  <div className="flex flex-wrap gap-2" data-testid="list-sizes">
+                    {formData.sizes.map((size, index) => (
+                      <Badge
+                        key={index}
+                        variant="secondary"
+                        className="flex items-center space-x-1"
+                      >
+                        <span>{size}</span>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setFormData(prev => ({
+                              ...prev,
+                              sizes: prev.sizes?.filter((_, i) => i !== index) || []
+                            }));
+                          }}
+                          className="ml-1 hover:text-red-500"
+                          data-testid={`button-remove-size-${index}`}
+                        >
+                          <X className="h-3 w-3" />
+                        </button>
+                      </Badge>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Colors */}
+            <div>
+              <Label>Couleurs disponibles</Label>
+              <div className="mt-2 space-y-2">
+                <div className="flex space-x-2">
+                  <Input
+                    placeholder="Nom de la couleur (ex: Rouge, Bleu)"
+                    value={newColor}
+                    onChange={(e) => setNewColor(e.target.value)}
+                    data-testid="input-new-color"
+                  />
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => {
+                      if (newColor.trim() && !formData.colors?.includes(newColor.trim())) {
+                        setFormData(prev => ({
+                          ...prev,
+                          colors: [...(prev.colors || []), newColor.trim()]
+                        }));
+                        setNewColor("");
+                      }
+                    }}
+                    data-testid="button-add-color"
+                  >
+                    <Plus className="h-4 w-4" />
+                  </Button>
+                </div>
+                {formData.colors && formData.colors.length > 0 && (
+                  <div className="flex flex-wrap gap-2" data-testid="list-colors">
+                    {formData.colors.map((color, index) => (
+                      <Badge
+                        key={index}
+                        variant="secondary"
+                        className="flex items-center space-x-1"
+                      >
+                        <span>{color}</span>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setFormData(prev => ({
+                              ...prev,
+                              colors: prev.colors?.filter((_, i) => i !== index) || []
+                            }));
+                          }}
+                          className="ml-1 hover:text-red-500"
+                          data-testid={`button-remove-color-${index}`}
+                        >
+                          <X className="h-3 w-3" />
+                        </button>
+                      </Badge>
+                    ))}
+                  </div>
+                )}
+              </div>
             </div>
 
             <div>
@@ -331,7 +523,7 @@ export default function ProductForm() {
                 id="stock"
                 type="number"
                 min="0"
-                value={formData.stock}
+                value={formData.stock || 0}
                 onChange={(e) => setFormData(prev => ({ ...prev, stock: parseInt(e.target.value) || 0 }))}
                 className="mt-1"
                 data-testid="input-product-stock"

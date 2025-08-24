@@ -27,9 +27,8 @@ export default function Home() {
 
   const filteredProducts = products.filter(product => {
     if (activeFilter === "all") return true;
-    if (activeFilter === "nouveau") return true; // Could add a "isNew" field
-    if (activeFilter === "homme" || activeFilter === "femme") {
-      return product.category === activeFilter;
+    if (activeFilter === "home") {
+      return product.category === "home";
     }
     
     return true;
@@ -46,9 +45,7 @@ export default function Home() {
 
   const filters = [
     { key: "all", label: "Tous les produits" },
-    { key: "homme", label: "Homme" },
-    { key: "femme", label: "Femme" },
-    { key: "nouveau", label: "Nouveautés" },
+    { key: "home", label: "Home" },
   ];
 
   return (
@@ -131,18 +128,78 @@ export default function Home() {
       </nav>
 
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-primary to-coral text-white py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-4xl md:text-6xl font-bold mb-6" data-testid="text-hero-title">
-            Pix Store DZ
-          </h1>
-          <p className="text-xl md:text-2xl mb-8 opacity-90" data-testid="text-hero-subtitle">
-            Votre destination pour les meilleurs t-shirts en Algérie
-          </p>
-          <p className="text-lg mb-10 max-w-2xl mx-auto opacity-80" data-testid="text-hero-description">
-            Découvrez notre collection exclusive de t-shirts de qualité premium. Livraison dans toute l'Algérie avec les meilleurs prix.
-          </p>
-          
+      <section className="relative bg-gradient-to-br from-primary via-coral to-orange-600 text-white py-24 md:py-32 overflow-hidden">
+        {/* Background decorative elements */}
+        <div className="absolute inset-0 bg-black bg-opacity-10">
+          <div className="absolute top-0 left-0 w-64 h-64 bg-white opacity-5 rounded-full -translate-x-32 -translate-y-32"></div>
+          <div className="absolute top-1/2 right-0 w-96 h-96 bg-white opacity-5 rounded-full translate-x-48 -translate-y-48"></div>
+          <div className="absolute bottom-0 left-1/3 w-32 h-32 bg-white opacity-10 rounded-full translate-y-16"></div>
+        </div>
+        
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <div className="mb-8">
+              <h1 className="text-5xl md:text-7xl lg:text-8xl font-extrabold mb-6 tracking-tight" data-testid="text-hero-title">
+                <span className="bg-gradient-to-r from-white to-orange-100 bg-clip-text text-transparent">
+                  Pix Store DZ
+                </span>
+              </h1>
+              <div className="w-24 h-1 bg-white mx-auto rounded-full opacity-60"></div>
+            </div>
+            
+            <p className="text-2xl md:text-3xl lg:text-4xl mb-8 font-light leading-relaxed" data-testid="text-hero-subtitle">
+              Votre destination pour les 
+              <span className="font-semibold text-orange-200"> meilleurs t-shirts</span> en Algérie
+            </p>
+            
+            <p className="text-lg md:text-xl mb-12 max-w-3xl mx-auto leading-relaxed opacity-90" data-testid="text-hero-description">
+              Découvrez notre collection exclusive de t-shirts de qualité premium. 
+              Designs uniques, matières exceptionnelles et livraison rapide dans toutes les wilayas d'Algérie.
+            </p>
+            
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+              <Button 
+                size="lg"
+                className="bg-white text-primary hover:bg-gray-100 font-semibold px-8 py-4 text-lg rounded-full shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300"
+                onClick={() => document.getElementById('products')?.scrollIntoView({ behavior: 'smooth' })}
+                data-testid="button-shop-now"
+              >
+                <ShoppingCart className="mr-2 h-5 w-5" />
+                Découvrir la Collection
+              </Button>
+              
+              <Button 
+                variant="outline"
+                size="lg"
+                className="border-2 border-white text-white hover:bg-white hover:text-primary font-semibold px-8 py-4 text-lg rounded-full backdrop-blur-sm bg-white bg-opacity-10 hover:bg-opacity-100 transition-all duration-300"
+                data-testid="button-learn-more"
+              >
+                En savoir plus
+              </Button>
+            </div>
+            
+            <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+              <div className="bg-white bg-opacity-10 backdrop-blur-sm rounded-2xl p-6 border border-white border-opacity-20">
+                <div className="text-3xl font-bold mb-2">58</div>
+                <div className="text-orange-200 font-medium">Wilayas couvertes</div>
+              </div>
+              <div className="bg-white bg-opacity-10 backdrop-blur-sm rounded-2xl p-6 border border-white border-opacity-20">
+                <div className="text-3xl font-bold mb-2">100%</div>
+                <div className="text-orange-200 font-medium">Qualité garantie</div>
+              </div>
+              <div className="bg-white bg-opacity-10 backdrop-blur-sm rounded-2xl p-6 border border-white border-opacity-20">
+                <div className="text-3xl font-bold mb-2">24h</div>
+                <div className="text-orange-200 font-medium">Livraison express</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        {/* Bottom wave */}
+        <div className="absolute bottom-0 left-0 right-0">
+          <svg className="w-full h-12 md:h-20 text-white" viewBox="0 0 1200 120" preserveAspectRatio="none">
+            <path d="M0,0V60c0,0,200,40,600,40s600-40,600-40V0Z" className="fill-current"></path>
+          </svg>
         </div>
       </section>
 
