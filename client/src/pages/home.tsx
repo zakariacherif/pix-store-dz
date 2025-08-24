@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { Search, ShoppingCart, Users, Truck, Shield, Menu, X } from "lucide-react";
+import { ShoppingCart, Users, Truck, Menu, X, CheckCircle } from "lucide-react";
 import ProductCard from "@/components/product-card";
 import CheckoutModal from "@/components/checkout-modal";
 import { cartManager } from "@/lib/cart";
@@ -14,7 +14,6 @@ export default function Home() {
   const [cartState, setCartState] = useState<CartState>(cartManager.getState());
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
   const [activeFilter, setActiveFilter] = useState("all");
 
   const { data: products = [], isLoading } = useQuery<Product[]>({
@@ -27,16 +26,13 @@ export default function Home() {
   }, []);
 
   const filteredProducts = products.filter(product => {
-    const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         product.description?.toLowerCase().includes(searchQuery.toLowerCase());
-    
-    if (activeFilter === "all") return matchesSearch;
-    if (activeFilter === "nouveau") return matchesSearch; // Could add a "isNew" field
+    if (activeFilter === "all") return true;
+    if (activeFilter === "nouveau") return true; // Could add a "isNew" field
     if (activeFilter === "homme" || activeFilter === "femme") {
-      return matchesSearch && product.category === activeFilter;
+      return product.category === activeFilter;
     }
     
-    return matchesSearch;
+    return true;
   });
 
   const handleAddToCart = (product: Product) => {
@@ -100,10 +96,6 @@ export default function Home() {
                   </Badge>
                 )}
               </Button>
-              <a href="/admin" className="hidden md:block text-sm text-gray-600 hover:text-primary transition-colors">
-                <Shield className="h-4 w-4 inline mr-1" />
-                Admin
-              </a>
               <Button
                 variant="ghost"
                 size="sm"
@@ -133,9 +125,6 @@ export default function Home() {
               <a href="#" className="block px-3 py-2 text-gray-900 hover:text-primary transition-colors">
                 Contact
               </a>
-              <a href="/admin" className="block px-3 py-2 text-gray-600 hover:text-primary transition-colors">
-                Admin
-              </a>
             </div>
           </div>
         )}
@@ -154,23 +143,6 @@ export default function Home() {
             Découvrez notre collection exclusive de t-shirts de qualité premium. Livraison dans toute l'Algérie avec les meilleurs prix.
           </p>
           
-          {/* Search Bar */}
-          <div className="max-w-lg mx-auto relative">
-            <Input
-              type="text"
-              placeholder="Rechercher des produits..."
-              className="w-full px-6 py-4 pr-16 rounded-full text-gray-900 text-lg border-0"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              data-testid="input-search"
-            />
-            <Button
-              className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-primary hover:bg-primary-dark text-white rounded-full"
-              data-testid="button-search"
-            >
-              <Search className="h-4 w-4" />
-            </Button>
-          </div>
         </div>
       </section>
 
@@ -194,7 +166,7 @@ export default function Home() {
             </div>
             <div className="space-y-4">
               <div className="text-primary text-5xl">
-                <Shield className="mx-auto" />
+                <CheckCircle className="mx-auto" />
               </div>
               <h3 className="text-3xl font-bold text-gray-900" data-testid="text-stat-quality">100%</h3>
               <p className="text-gray-600">Qualité garantie</p>

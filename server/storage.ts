@@ -18,7 +18,7 @@ import {
   type CreateOrderRequest,
 } from "@shared/schema";
 import { db } from "./db";
-import { eq, desc, and } from "drizzle-orm";
+import { eq, desc, and, sql } from "drizzle-orm";
 
 export interface IStorage {
   // Products
@@ -42,6 +42,10 @@ export interface IStorage {
   // Admin
   getAdminByEmail(email: string): Promise<Admin | undefined>;
   createAdmin(admin: InsertAdmin): Promise<Admin>;
+
+  // Categories
+  getCategories(): Promise<string[]>;
+  deleteCategory(category: string): Promise<void>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -211,6 +215,26 @@ export class DatabaseStorage implements IStorage {
       .values(adminData)
       .returning();
     return admin;
+  }
+
+  // Categories
+  async getCategories(): Promise<string[]> {
+    const result = await db
+      .selectDistinct({ category: products.category })
+      .from(products)
+      .where(and(eq(products.isActive, true), sql`${products.category} IS NOT NULL`));
+    
+    return result
+      .map(row => row.category)
+      .filter(category => category && category.trim() !== "") as string[];
+  }
+
+  async deleteCategory(category: string): Promise<void> {
+    // Set category to null for all products with this category
+    await db
+      .update(products)
+      .set({ category: null })
+      .where(eq(products.category, category));
   }
 }
 

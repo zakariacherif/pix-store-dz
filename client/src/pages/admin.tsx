@@ -12,6 +12,7 @@ import { Shield, LogOut, Package, ShoppingCart, TrendingUp, Clock } from "lucide
 import ProductForm from "@/components/admin/product-form";
 import OrdersTable from "@/components/admin/orders-table";
 import DeliveryPricing from "@/components/admin/delivery-pricing";
+import CategoryManagement from "@/components/admin/category-management";
 import { AdminAuth } from "@/types";
 
 export default function Admin() {
@@ -29,7 +30,7 @@ export default function Admin() {
 
   useEffect(() => {
     if (adminProfile) {
-      setAuth({ isAuthenticated: true, admin: adminProfile });
+      setAuth({ isAuthenticated: true, admin: adminProfile as { id: string; email: string } });
     }
   }, [adminProfile]);
 
@@ -243,6 +244,13 @@ export default function Admin() {
             >
               Tarifs Livraison
             </TabsTrigger>
+            <TabsTrigger 
+              value="categories" 
+              className="data-[state=active]:bg-primary data-[state=active]:text-white"
+              data-testid="tab-categories"
+            >
+              Catégories
+            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="products" className="space-y-6">
@@ -255,6 +263,10 @@ export default function Admin() {
 
           <TabsContent value="delivery" className="space-y-6">
             <DeliveryPricing />
+          </TabsContent>
+
+          <TabsContent value="categories" className="space-y-6">
+            <CategoryManagement />
           </TabsContent>
         </Tabs>
       </div>

@@ -1,11 +1,12 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertProductSchema, insertWilayaSchema, type CreateOrderRequest } from "@shared/schema";
+import { insertProductSchema, insertWilayaSchema, type CreateOrderRequest, wilayas } from "@shared/schema";
 import { z } from "zod";
 import bcrypt from "bcrypt";
 import session from "express-session";
 import connectPg from "connect-pg-simple";
+import { db } from "./db";
 
 // Session configuration
 const sessionTtl = 7 * 24 * 60 * 60 * 1000; // 1 week
@@ -29,6 +30,13 @@ const sessionMiddleware = session({
     maxAge: sessionTtl,
   },
 });
+
+// Extend session interface
+declare module "express-session" {
+  interface SessionData {
+    adminId?: string;
+  }
+}
 
 // Auth middleware
 const isAuthenticated = (req: any, res: any, next: any) => {
@@ -75,24 +83,81 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   };
 
-  // Initialize default wilayas
+  // Initialize all 58 Algerian wilayas
   const initWilayas = async () => {
     try {
       const existingWilayas = await storage.getWilayas();
       if (existingWilayas.length === 0) {
-        const defaultWilayas = [
-          { code: "01", name: "Alger", deliveryPrice: "300" },
-          { code: "31", name: "Oran", deliveryPrice: "500" },
-          { code: "25", name: "Constantine", deliveryPrice: "600" },
-          { code: "19", name: "Sétif", deliveryPrice: "550" },
+        const algerianWilayas = [
+          { code: "01", name: "Adrar", deliveryPrice: "800" },
+          { code: "02", name: "Chlef", deliveryPrice: "500" },
+          { code: "03", name: "Laghouat", deliveryPrice: "700" },
+          { code: "04", name: "Oum El Bouaghi", deliveryPrice: "600" },
           { code: "05", name: "Batna", deliveryPrice: "650" },
+          { code: "06", name: "Béjaïa", deliveryPrice: "550" },
+          { code: "07", name: "Biskra", deliveryPrice: "700" },
+          { code: "08", name: "Béchar", deliveryPrice: "900" },
+          { code: "09", name: "Blida", deliveryPrice: "350" },
+          { code: "10", name: "Bouira", deliveryPrice: "400" },
+          { code: "11", name: "Tamanrasset", deliveryPrice: "1000" },
+          { code: "12", name: "Tébessa", deliveryPrice: "750" },
+          { code: "13", name: "Tlemcen", deliveryPrice: "600" },
+          { code: "14", name: "Tiaret", deliveryPrice: "550" },
+          { code: "15", name: "Tizi Ouzou", deliveryPrice: "450" },
+          { code: "16", name: "Alger", deliveryPrice: "300" },
+          { code: "17", name: "Djelfa", deliveryPrice: "650" },
+          { code: "18", name: "Jijel", deliveryPrice: "600" },
+          { code: "19", name: "Sétif", deliveryPrice: "550" },
+          { code: "20", name: "Saïda", deliveryPrice: "650" },
+          { code: "21", name: "Skikda", deliveryPrice: "650" },
+          { code: "22", name: "Sidi Bel Abbès", deliveryPrice: "600" },
           { code: "23", name: "Annaba", deliveryPrice: "700" },
-          { code: "13", name: "Tlemcen", deliveryPrice: "750" },
-          // Add more wilayas as needed
+          { code: "24", name: "Guelma", deliveryPrice: "650" },
+          { code: "25", name: "Constantine", deliveryPrice: "600" },
+          { code: "26", name: "Médéa", deliveryPrice: "450" },
+          { code: "27", name: "Mostaganem", deliveryPrice: "550" },
+          { code: "28", name: "M'Sila", deliveryPrice: "650" },
+          { code: "29", name: "Mascara", deliveryPrice: "600" },
+          { code: "30", name: "Ouargla", deliveryPrice: "800" },
+          { code: "31", name: "Oran", deliveryPrice: "500" },
+          { code: "32", name: "El Bayadh", deliveryPrice: "700" },
+          { code: "33", name: "Illizi", deliveryPrice: "1000" },
+          { code: "34", name: "Bordj Bou Arréridj", deliveryPrice: "550" },
+          { code: "35", name: "Boumerdès", deliveryPrice: "400" },
+          { code: "36", name: "El Tarf", deliveryPrice: "750" },
+          { code: "37", name: "Tindouf", deliveryPrice: "1000" },
+          { code: "38", name: "Tissemsilt", deliveryPrice: "600" },
+          { code: "39", name: "El Oued", deliveryPrice: "750" },
+          { code: "40", name: "Khenchela", deliveryPrice: "700" },
+          { code: "41", name: "Souk Ahras", deliveryPrice: "700" },
+          { code: "42", name: "Tipaza", deliveryPrice: "400" },
+          { code: "43", name: "Mila", deliveryPrice: "650" },
+          { code: "44", name: "Aïn Defla", deliveryPrice: "500" },
+          { code: "45", name: "Naâma", deliveryPrice: "750" },
+          { code: "46", name: "Aïn Témouchent", deliveryPrice: "600" },
+          { code: "47", name: "Ghardaïa", deliveryPrice: "750" },
+          { code: "48", name: "Relizane", deliveryPrice: "550" },
+          { code: "49", name: "Timimoun", deliveryPrice: "900" },
+          { code: "50", name: "Bordj Badji Mokhtar", deliveryPrice: "1000" },
+          { code: "51", name: "Ouled Djellal", deliveryPrice: "700" },
+          { code: "52", name: "Béni Abbès", deliveryPrice: "900" },
+          { code: "53", name: "In Salah", deliveryPrice: "1000" },
+          { code: "54", name: "In Guezzam", deliveryPrice: "1000" },
+          { code: "55", name: "Touggourt", deliveryPrice: "750" },
+          { code: "56", name: "Djanet", deliveryPrice: "1000" },
+          { code: "57", name: "El M'Ghair", deliveryPrice: "800" },
+          { code: "58", name: "El Meniaa", deliveryPrice: "800" }
         ];
 
-        for (const wilayaData of defaultWilayas) {
-          await storage.updateWilayaDeliveryPrice("", wilayaData.deliveryPrice);
+        for (const wilayaData of algerianWilayas) {
+          const [wilaya] = await db
+            .insert(wilayas)
+            .values({
+              code: wilayaData.code,
+              name: wilayaData.name,
+              deliveryPrice: wilayaData.deliveryPrice,
+            })
+            .returning();
         }
       }
     } catch (error) {
@@ -282,6 +347,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error updating delivery price:", error);
       res.status(500).json({ message: "Failed to update delivery price" });
+    }
+  });
+
+  // Category management
+  app.get("/api/admin/categories", isAuthenticated, async (req, res) => {
+    try {
+      const categories = await storage.getCategories();
+      res.json(categories);
+    } catch (error) {
+      console.error("Error fetching categories:", error);
+      res.status(500).json({ message: "Failed to fetch categories" });
+    }
+  });
+
+  app.delete("/api/admin/categories/:category", isAuthenticated, async (req, res) => {
+    try {
+      await storage.deleteCategory(req.params.category);
+      res.json({ message: "Category deleted successfully" });
+    } catch (error) {
+      console.error("Error deleting category:", error);
+      res.status(500).json({ message: "Failed to delete category" });
     }
   });
 
