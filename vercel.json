@@ -2,16 +2,14 @@
   "version": 2,
   "builds": [
     {
-      "src": "/client/", // Adjust path to your frontend directory
+      "src": "client/package.json",
       "use": "@vercel/static-build"
     }
   ],
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "/client/dist/$1"
+      "dest": "client/dist/$1"
     }
-  ],
-  "buildCommand": "cd client && npm run build",
-  "outputDirectory": "client/dist"
+  ]
 }
