@@ -3,6 +3,7 @@ import react from "@vitejs/plugin-react";
 import path from "path";
 import runtimeErrorOverlay from "@replit/vite-plugin-runtime-error-modal";
 
+// Vite config for frontend (client) in a monorepo
 export default defineConfig({
   plugins: [
     react(),
@@ -16,18 +17,23 @@ export default defineConfig({
         ]
       : []),
   ],
+
+  // Root of the frontend app
+  root: path.resolve(__dirname),
+
   resolve: {
     alias: {
-      "@": path.resolve(import.meta.dirname, "client", "src"),
-      "@shared": path.resolve(import.meta.dirname, "shared"),
-      "@assets": path.resolve(import.meta.dirname, "attached_assets"),
+      "@": path.resolve(__dirname, "src"),
+      "@shared": path.resolve(__dirname, "../shared"), // allow imports from shared/
+      "@assets": path.resolve(__dirname, "attached_assets"),
     },
   },
-  root: path.resolve(import.meta.dirname, "client"),
+
   build: {
-    outDir: path.resolve(import.meta.dirname, "dist"),
-    emptyOutDir: true,
+    outDir: "dist",       // Output directory relative to client/
+    emptyOutDir: true,    // Clean before building
   },
+
   server: {
     fs: {
       strict: true,
