@@ -1,0 +1,1028 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pix Store DZ - E-commerce Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#FF6B35',
+                        'primary-dark': '#E55B2B',
+                        coral: '#FF7F66',
+                        'orange-light': '#FF8C42'
+                    },
+                    fontFamily: {
+                        'inter': ['Inter', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="font-inter bg-gray-50">
+    <!-- Navigation Header -->
+    <nav class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <span class="text-2xl font-bold text-primary">Pix Store DZ</span>
+                    </div>
+                    <div class="hidden md:block ml-10">
+                        <div class="flex items-baseline space-x-8">
+                            <a href="#" class="text-gray-900 hover:text-primary px-3 py-2 text-sm font-medium transition-colors">Accueil</a>
+                            <a href="#products" class="text-primary px-3 py-2 text-sm font-medium">Produits</a>
+                            <a href="#" class="text-gray-900 hover:text-primary px-3 py-2 text-sm font-medium transition-colors">À propos</a>
+                            <a href="#" class="text-gray-900 hover:text-primary px-3 py-2 text-sm font-medium transition-colors">Contact</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button id="cart-btn" class="relative p-2 text-gray-600 hover:text-primary transition-colors">
+                        <i class="fas fa-shopping-cart text-lg"></i>
+                        <span id="cart-count" class="absolute -top-1 -right-1 bg-primary text-white text-xs rounded-full h-5 w-5 flex items-center justify-center hidden">0</span>
+                    </button>
+                    <a href="#admin" class="hidden md:block text-sm text-gray-600 hover:text-primary transition-colors">
+                        <i class="fas fa-user-cog mr-1"></i>Admin
+                    </a>
+                    <button id="mobile-menu-btn" class="md:hidden p-2 text-gray-600">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile menu -->
+        <div id="mobile-menu" class="md:hidden hidden bg-white border-t">
+            <div class="px-2 pt-2 pb-3 space-y-1">
+                <a href="#" class="block px-3 py-2 text-gray-900 hover:text-primary transition-colors">Accueil</a>
+                <a href="#products" class="block px-3 py-2 text-primary">Produits</a>
+                <a href="#" class="block px-3 py-2 text-gray-900 hover:text-primary transition-colors">À propos</a>
+                <a href="#" class="block px-3 py-2 text-gray-900 hover:text-primary transition-colors">Contact</a>
+                <a href="#admin" class="block px-3 py-2 text-gray-600 hover:text-primary transition-colors">Admin</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="bg-gradient-to-br from-primary to-coral text-white py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h1 class="text-4xl md:text-6xl font-bold mb-6">Pix Store DZ</h1>
+            <p class="text-xl md:text-2xl mb-8 opacity-90">Votre destination pour les meilleurs t-shirts en Algérie</p>
+            <p class="text-lg mb-10 max-w-2xl mx-auto opacity-80">Découvrez notre collection exclusive de t-shirts de qualité premium. Livraison dans toute l'Algérie avec les meilleurs prix.</p>
+            
+            <!-- Search Bar -->
+            <div class="max-w-lg mx-auto relative">
+                <input type="text" placeholder="Rechercher des produits..." 
+                       class="w-full px-6 py-4 pr-16 rounded-full text-gray-900 text-lg focus:outline-none focus:ring-4 focus:ring-white focus:ring-opacity-30">
+                <button class="absolute right-2 top-1/2 transform -translate-y-1/2 bg-primary hover:bg-primary-dark text-white px-6 py-2 rounded-full transition-colors">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-3 gap-8 text-center">
+                <div class="space-y-4">
+                    <div class="text-primary text-5xl">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3 class="text-3xl font-bold text-gray-900">5000+</h3>
+                    <p class="text-gray-600">Clients satisfaits</p>
+                </div>
+                <div class="space-y-4">
+                    <div class="text-primary text-5xl">
+                        <i class="fas fa-truck"></i>
+                    </div>
+                    <h3 class="text-3xl font-bold text-gray-900">58 Wilayas</h3>
+                    <p class="text-gray-600">Livraison nationale</p>
+                </div>
+                <div class="space-y-4">
+                    <div class="text-primary text-5xl">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3 class="text-3xl font-bold text-gray-900">100%</h3>
+                    <p class="text-gray-600">Qualité garantie</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section id="products" class="py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-gray-900 mb-4">Nos T-shirts</h2>
+                <p class="text-xl text-gray-600 max-w-2xl mx-auto">Collection exclusive de t-shirts de qualité premium pour hommes et femmes</p>
+            </div>
+
+            <!-- Filters -->
+            <div class="flex flex-wrap justify-center mb-12 space-x-4">
+                <button class="filter-btn active px-6 py-2 rounded-full border-2 border-primary bg-primary text-white hover:bg-primary-dark transition-colors">
+                    Tous les produits
+                </button>
+                <button class="filter-btn px-6 py-2 rounded-full border-2 border-gray-300 text-gray-700 hover:border-primary hover:text-primary transition-colors">
+                    Homme
+                </button>
+                <button class="filter-btn px-6 py-2 rounded-full border-2 border-gray-300 text-gray-700 hover:border-primary hover:text-primary transition-colors">
+                    Femme
+                </button>
+                <button class="filter-btn px-6 py-2 rounded-full border-2 border-gray-300 text-gray-700 hover:border-primary hover:text-primary transition-colors">
+                    Nouveautés
+                </button>
+            </div>
+
+            <!-- Product Grid -->
+            <div id="products-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                <!-- Product Card 1 -->
+                <div class="product-card bg-white rounded-xl shadow-md hover:shadow-xl transition-shadow overflow-hidden group" data-mock="true">
+                    <div class="relative overflow-hidden">
+                        <!-- Modern graphic t-shirt with geometric patterns -->
+                        <img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=600" 
+                             alt="T-shirt graphique moderne" 
+                             class="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300">
+                        <div class="absolute top-4 left-4 bg-green-500 text-white text-xs px-2 py-1 rounded-full">
+                            Nouveau
+                        </div>
+                        <button class="absolute top-4 right-4 bg-white text-gray-600 hover:text-red-500 p-2 rounded-full shadow-md opacity-0 group-hover:opacity-100 transition-opacity">
+                            <i class="fas fa-heart"></i>
+                        </button>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-semibold text-lg text-gray-900 mb-2" data-bind="product.name">T-shirt Graphique Moderne</h3>
+                        <p class="text-gray-600 text-sm mb-4" data-bind="product.description">Design contemporain avec motifs géométriques</p>
+                        <div class="flex items-center justify-between">
+                            <div class="text-2xl font-bold text-primary" data-bind="product.price">2,500 DA</div>
+                            <button class="add-to-cart bg-primary hover:bg-primary-dark text-white px-4 py-2 rounded-lg transition-colors" data-product-id="1">
+                                <i class="fas fa-cart-plus mr-2"></i>Ajouter
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product Card 2 -->
+                <div class="product-card bg-white rounded-xl shadow-md hover:shadow-xl transition-shadow overflow-hidden group" data-mock="true">
+                    <div class="relative overflow-hidden">
+                        <!-- Stylish black t-shirt -->
+                        <img src="https://images.unsplash.com/photo-1503341504253-dff4815485f1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=600" 
+                             alt="T-shirt noir élégant" 
+                             class="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300">
+                        <button class="absolute top-4 right-4 bg-white text-gray-600 hover:text-red-500 p-2 rounded-full shadow-md opacity-0 group-hover:opacity-100 transition-opacity">
+                            <i class="fas fa-heart"></i>
+                        </button>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-semibold text-lg text-gray-900 mb-2" data-bind="product.name">T-shirt Classique Noir</h3>
+                        <p class="text-gray-600 text-sm mb-4" data-bind="product.description">Style intemporel et coupe ajustée</p>
+                        <div class="flex items-center justify-between">
+                            <div class="text-2xl font-bold text-primary" data-bind="product.price">2,200 DA</div>
+                            <button class="add-to-cart bg-primary hover:bg-primary-dark text-white px-4 py-2 rounded-lg transition-colors" data-product-id="2">
+                                <i class="fas fa-cart-plus mr-2"></i>Ajouter
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product Card 3 -->
+                <div class="product-card bg-white rounded-xl shadow-md hover:shadow-xl transition-shadow overflow-hidden group" data-mock="true">
+                    <div class="relative overflow-hidden">
+                        <!-- Vintage-style t-shirt -->
+                        <img src="https://images.unsplash.com/photo-1576871337622-98d48d1cf531?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=600" 
+                             alt="T-shirt vintage" 
+                             class="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300">
+                        <div class="absolute top-4 left-4 bg-red-500 text-white text-xs px-2 py-1 rounded-full">
+                            -20%
+                        </div>
+                        <button class="absolute top-4 right-4 bg-white text-gray-600 hover:text-red-500 p-2 rounded-full shadow-md opacity-0 group-hover:opacity-100 transition-opacity">
+                            <i class="fas fa-heart"></i>
+                        </button>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-semibold text-lg text-gray-900 mb-2" data-bind="product.name">T-shirt Vintage Style</h3>
+                        <p class="text-gray-600 text-sm mb-4" data-bind="product.description">Look rétro avec impression délavée</p>
+                        <div class="flex items-center justify-between">
+                            <div class="space-y-1">
+                                <div class="text-2xl font-bold text-primary" data-bind="product.discountPrice">1,900 DA</div>
+                                <div class="text-sm text-gray-500 line-through" data-bind="product.originalPrice">2,400 DA</div>
+                            </div>
+                            <button class="add-to-cart bg-primary hover:bg-primary-dark text-white px-4 py-2 rounded-lg transition-colors" data-product-id="3">
+                                <i class="fas fa-cart-plus mr-2"></i>Ajouter
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product Card 4 -->
+                <div class="product-card bg-white rounded-xl shadow-md hover:shadow-xl transition-shadow overflow-hidden group" data-mock="true">
+                    <div class="relative overflow-hidden">
+                        <!-- Colorful patterned t-shirt -->
+                        <img src="https://images.unsplash.com/photo-1562157873-818bc0726f68?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=600" 
+                             alt="T-shirt coloré à motifs" 
+                             class="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300">
+                        <button class="absolute top-4 right-4 bg-white text-gray-600 hover:text-red-500 p-2 rounded-full shadow-md opacity-0 group-hover:opacity-100 transition-opacity">
+                            <i class="fas fa-heart"></i>
+                        </button>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-semibold text-lg text-gray-900 mb-2" data-bind="product.name">T-shirt Coloré Pattern</h3>
+                        <p class="text-gray-600 text-sm mb-4" data-bind="product.description">Motifs vibrants pour un look unique</p>
+                        <div class="flex items-center justify-between">
+                            <div class="text-2xl font-bold text-primary" data-bind="product.price">2,800 DA</div>
+                            <button class="add-to-cart bg-primary hover:bg-primary-dark text-white px-4 py-2 rounded-lg transition-colors" data-product-id="4">
+                                <i class="fas fa-cart-plus mr-2"></i>Ajouter
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product Card 5 -->
+                <div class="product-card bg-white rounded-xl shadow-md hover:shadow-xl transition-shadow overflow-hidden group" data-mock="true">
+                    <div class="relative overflow-hidden">
+                        <!-- Sports/athletic t-shirt -->
+                        <img src="https://images.unsplash.com/photo-1571945153237-4929e783af4a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=600" 
+                             alt="T-shirt sport" 
+                             class="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300">
+                        <button class="absolute top-4 right-4 bg-white text-gray-600 hover:text-red-500 p-2 rounded-full shadow-md opacity-0 group-hover:opacity-100 transition-opacity">
+                            <i class="fas fa-heart"></i>
+                        </button>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-semibold text-lg text-gray-900 mb-2" data-bind="product.name">T-shirt Sport Premium</h3>
+                        <p class="text-gray-600 text-sm mb-4" data-bind="product.description">Matière respirante pour le sport</p>
+                        <div class="flex items-center justify-between">
+                            <div class="text-2xl font-bold text-primary" data-bind="product.price">3,200 DA</div>
+                            <button class="add-to-cart bg-primary hover:bg-primary-dark text-white px-4 py-2 rounded-lg transition-colors" data-product-id="5">
+                                <i class="fas fa-cart-plus mr-2"></i>Ajouter
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product Card 6 -->
+                <div class="product-card bg-white rounded-xl shadow-md hover:shadow-xl transition-shadow overflow-hidden group" data-mock="true">
+                    <div class="relative overflow-hidden">
+                        <!-- Minimalist white t-shirt -->
+                        <img src="https://images.unsplash.com/photo-1586790170083-2f9ceadc732d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=600" 
+                             alt="T-shirt blanc minimaliste" 
+                             class="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300">
+                        <button class="absolute top-4 right-4 bg-white text-gray-600 hover:text-red-500 p-2 rounded-full shadow-md opacity-0 group-hover:opacity-100 transition-opacity">
+                            <i class="fas fa-heart"></i>
+                        </button>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-semibold text-lg text-gray-900 mb-2" data-bind="product.name">T-shirt Blanc Essential</h3>
+                        <p class="text-gray-600 text-sm mb-4" data-bind="product.description">Basique incontournable, coupe parfaite</p>
+                        <div class="flex items-center justify-between">
+                            <div class="text-2xl font-bold text-primary" data-bind="product.price">2,000 DA</div>
+                            <button class="add-to-cart bg-primary hover:bg-primary-dark text-white px-4 py-2 rounded-lg transition-colors" data-product-id="6">
+                                <i class="fas fa-cart-plus mr-2"></i>Ajouter
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product Card 7 -->
+                <div class="product-card bg-white rounded-xl shadow-md hover:shadow-xl transition-shadow overflow-hidden group" data-mock="true">
+                    <div class="relative overflow-hidden">
+                        <!-- Artistic/creative t-shirt design -->
+                        <img src="https://images.unsplash.com/photo-1618354691373-d851c5c3a990?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=600" 
+                             alt="T-shirt artistique" 
+                             class="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300">
+                        <div class="absolute top-4 left-4 bg-purple-500 text-white text-xs px-2 py-1 rounded-full">
+                            Édition limitée
+                        </div>
+                        <button class="absolute top-4 right-4 bg-white text-gray-600 hover:text-red-500 p-2 rounded-full shadow-md opacity-0 group-hover:opacity-100 transition-opacity">
+                            <i class="fas fa-heart"></i>
+                        </button>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-semibold text-lg text-gray-900 mb-2" data-bind="product.name">T-shirt Artist Edition</h3>
+                        <p class="text-gray-600 text-sm mb-4" data-bind="product.description">Design exclusif par artistes locaux</p>
+                        <div class="flex items-center justify-between">
+                            <div class="text-2xl font-bold text-primary" data-bind="product.price">3,500 DA</div>
+                            <button class="add-to-cart bg-primary hover:bg-primary-dark text-white px-4 py-2 rounded-lg transition-colors" data-product-id="7">
+                                <i class="fas fa-cart-plus mr-2"></i>Ajouter
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product Card 8 -->
+                <div class="product-card bg-white rounded-xl shadow-md hover:shadow-xl transition-shadow overflow-hidden group" data-mock="true">
+                    <div class="relative overflow-hidden">
+                        <!-- Casual everyday t-shirt -->
+                        <img src="https://images.unsplash.com/photo-1554568218-0f1715e72254?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=600" 
+                             alt="T-shirt casual quotidien" 
+                             class="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300">
+                        <button class="absolute top-4 right-4 bg-white text-gray-600 hover:text-red-500 p-2 rounded-full shadow-md opacity-0 group-hover:opacity-100 transition-opacity">
+                            <i class="fas fa-heart"></i>
+                        </button>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-semibold text-lg text-gray-900 mb-2" data-bind="product.name">T-shirt Casual Daily</h3>
+                        <p class="text-gray-600 text-sm mb-4" data-bind="product.description">Confort optimal pour le quotidien</p>
+                        <div class="flex items-center justify-between">
+                            <div class="text-2xl font-bold text-primary" data-bind="product.price">2,300 DA</div>
+                            <button class="add-to-cart bg-primary hover:bg-primary-dark text-white px-4 py-2 rounded-lg transition-colors" data-product-id="8">
+                                <i class="fas fa-cart-plus mr-2"></i>Ajouter
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Load More Button -->
+            <div class="text-center mt-16">
+                <button class="bg-white border-2 border-primary text-primary hover:bg-primary hover:text-white px-8 py-3 rounded-lg font-medium transition-colors">
+                    Charger plus de produits
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Checkout Modal -->
+    <div id="checkout-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white rounded-xl max-w-lg w-full max-h-screen overflow-y-auto">
+                <div class="p-6 border-b">
+                    <div class="flex items-center justify-between">
+                        <h2 class="text-2xl font-bold text-gray-900">Commander</h2>
+                        <button id="close-checkout" class="text-gray-400 hover:text-gray-600">
+                            <i class="fas fa-times text-xl"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="p-6 space-y-6">
+                    <!-- Cart Items -->
+                    <div id="cart-items" class="space-y-4">
+                        <!-- Cart items will be populated here -->
+                    </div>
+
+                    <!-- Customer Information -->
+                    <form id="checkout-form" class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Nom complet *</label>
+                            <input type="text" required 
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Numéro de téléphone *</label>
+                            <input type="tel" required 
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                                   placeholder="0X XX XX XX XX">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Wilaya *</label>
+                            <select required id="wilaya-select"
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                                <option value="">Choisir votre wilaya...</option>
+                                <option value="alger" data-delivery="300">01 - Alger (300 DA)</option>
+                                <option value="oran" data-delivery="500">31 - Oran (500 DA)</option>
+                                <option value="constantine" data-delivery="600">25 - Constantine (600 DA)</option>
+                                <option value="setif" data-delivery="550">19 - Sétif (550 DA)</option>
+                                <option value="batna" data-delivery="650">05 - Batna (650 DA)</option>
+                                <option value="annaba" data-delivery="700">23 - Annaba (700 DA)</option>
+                                <option value="tlemcen" data-delivery="750">13 - Tlemcen (750 DA)</option>
+                                <!-- Add more wilayas as needed -->
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Adresse complète</label>
+                            <textarea 
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                                rows="3" placeholder="Votre adresse complète..."></textarea>
+                        </div>
+
+                        <!-- Order Summary -->
+                        <div class="bg-gray-50 p-4 rounded-lg space-y-2">
+                            <div class="flex justify-between text-sm">
+                                <span>Sous-total:</span>
+                                <span id="subtotal">0 DA</span>
+                            </div>
+                            <div class="flex justify-between text-sm">
+                                <span>Livraison:</span>
+                                <span id="delivery-cost">0 DA</span>
+                            </div>
+                            <hr class="my-2">
+                            <div class="flex justify-between text-lg font-bold text-primary">
+                                <span>Total:</span>
+                                <span id="total-cost">0 DA</span>
+                            </div>
+                        </div>
+
+                        <button type="submit" 
+                                class="w-full bg-primary hover:bg-primary-dark text-white py-4 rounded-lg font-medium transition-colors">
+                            <i class="fas fa-credit-card mr-2"></i>Confirmer la commande
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Section -->
+    <section id="admin" class="py-20 bg-white border-t-8 border-primary">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- Admin Login -->
+            <div id="admin-login" class="max-w-md mx-auto">
+                <div class="text-center mb-8">
+                    <i class="fas fa-user-shield text-6xl text-primary mb-4"></i>
+                    <h2 class="text-3xl font-bold text-gray-900">Administration</h2>
+                    <p class="text-gray-600">Connectez-vous pour gérer votre boutique</p>
+                </div>
+                
+                <form id="login-form" class="space-y-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                        <input type="email" required 
+                               value="cherif.zakaria2019@gmail.com"
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Mot de passe</label>
+                        <input type="password" required 
+                               value="Cmz.0665397175"
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                    </div>
+                    
+                    <button type="submit" 
+                            class="w-full bg-primary hover:bg-primary-dark text-white py-3 rounded-lg font-medium transition-colors">
+                        Se connecter
+                    </button>
+                </form>
+            </div>
+
+            <!-- Admin Dashboard (Hidden initially) -->
+            <div id="admin-dashboard" class="hidden">
+                <div class="flex items-center justify-between mb-8">
+                    <div>
+                        <h2 class="text-3xl font-bold text-gray-900">Tableau de bord</h2>
+                        <p class="text-gray-600">Gérez vos produits et commandes</p>
+                    </div>
+                    <button id="admin-logout" class="text-gray-600 hover:text-primary">
+                        <i class="fas fa-sign-out-alt mr-2"></i>Déconnexion
+                    </button>
+                </div>
+
+                <!-- Dashboard Stats -->
+                <div class="grid md:grid-cols-4 gap-6 mb-8">
+                    <div class="bg-gradient-to-r from-blue-500 to-blue-600 p-6 rounded-xl text-white">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-blue-200 text-sm">Total Produits</p>
+                                <p class="text-3xl font-bold">24</p>
+                            </div>
+                            <i class="fas fa-box text-blue-200 text-2xl"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-gradient-to-r from-green-500 to-green-600 p-6 rounded-xl text-white">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-green-200 text-sm">Commandes</p>
+                                <p class="text-3xl font-bold">156</p>
+                            </div>
+                            <i class="fas fa-shopping-cart text-green-200 text-2xl"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-gradient-to-r from-primary to-orange-light p-6 rounded-xl text-white">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-orange-200 text-sm">Revenus</p>
+                                <p class="text-3xl font-bold">428,350 DA</p>
+                            </div>
+                            <i class="fas fa-chart-line text-orange-200 text-2xl"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-gradient-to-r from-purple-500 to-purple-600 p-6 rounded-xl text-white">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-purple-200 text-sm">En attente</p>
+                                <p class="text-3xl font-bold">8</p>
+                            </div>
+                            <i class="fas fa-clock text-purple-200 text-2xl"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Admin Navigation Tabs -->
+                <div class="flex border-b border-gray-200 mb-8">
+                    <button class="admin-tab active px-6 py-3 text-sm font-medium border-b-2 border-primary text-primary">
+                        Produits
+                    </button>
+                    <button class="admin-tab px-6 py-3 text-sm font-medium border-b-2 border-transparent text-gray-500 hover:text-gray-700">
+                        Commandes
+                    </button>
+                    <button class="admin-tab px-6 py-3 text-sm font-medium border-b-2 border-transparent text-gray-500 hover:text-gray-700">
+                        Tarifs Livraison
+                    </button>
+                </div>
+
+                <!-- Products Management Tab -->
+                <div id="products-tab" class="admin-content">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="text-xl font-bold text-gray-900">Gestion des Produits</h3>
+                        <button id="add-product-btn" class="bg-primary hover:bg-primary-dark text-white px-4 py-2 rounded-lg transition-colors">
+                            <i class="fas fa-plus mr-2"></i>Ajouter un produit
+                        </button>
+                    </div>
+
+                    <!-- Products Table -->
+                    <div class="bg-white rounded-lg shadow overflow-hidden">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Produit</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Prix</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Stock</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Statut</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200" data-mock="true">
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="flex items-center">
+                                            <div class="flex-shrink-0 h-10 w-10">
+                                                <!-- T-shirt product thumbnail -->
+                                                <img class="h-10 w-10 rounded-lg object-cover" src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=100&h=100" alt="Produit">
+                                            </div>
+                                            <div class="ml-4">
+                                                <div class="text-sm font-medium text-gray-900">T-shirt Graphique Moderne</div>
+                                                <div class="text-sm text-gray-500">Design contemporain</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">2,500 DA</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">25</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
+                                            Actif
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
+                                        <button class="text-indigo-600 hover:text-indigo-900">Modifier</button>
+                                        <button class="text-red-600 hover:text-red-900">Supprimer</button>
+                                    </td>
+                                </tr>
+                                <!-- More product rows would be here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Orders Management Tab -->
+                <div id="orders-tab" class="admin-content hidden">
+                    <h3 class="text-xl font-bold text-gray-900 mb-6">Gestion des Commandes</h3>
+                    
+                    <div class="bg-white rounded-lg shadow overflow-hidden">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">#Commande</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Client</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Statut</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200" data-mock="true">
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">#1001</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="text-sm font-medium text-gray-900">Ahmed Benali</div>
+                                        <div class="text-sm text-gray-500">0555123456</div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">2,800 DA</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800">
+                                            En attente
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
+                                        <button class="text-green-600 hover:text-green-900">Confirmer</button>
+                                        <button class="text-indigo-600 hover:text-indigo-900">Détails</button>
+                                    </td>
+                                </tr>
+                                <!-- More order rows would be here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Delivery Pricing Tab -->
+                <div id="delivery-tab" class="admin-content hidden">
+                    <h3 class="text-xl font-bold text-gray-900 mb-6">Tarifs de Livraison par Wilaya</h3>
+                    
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="bg-white rounded-lg shadow p-6">
+                            <h4 class="font-bold text-lg text-gray-900 mb-4">Modifier les tarifs</h4>
+                            <form class="space-y-4" data-mock="true">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Wilaya</label>
+                                    <select class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                                        <option>01 - Alger</option>
+                                        <option>31 - Oran</option>
+                                        <option>25 - Constantine</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Prix de livraison (DA)</label>
+                                    <input type="number" value="300" 
+                                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                                </div>
+                                <button type="submit" class="w-full bg-primary hover:bg-primary-dark text-white py-3 rounded-lg transition-colors">
+                                    Mettre à jour
+                                </button>
+                            </form>
+                        </div>
+
+                        <div class="bg-white rounded-lg shadow p-6">
+                            <h4 class="font-bold text-lg text-gray-900 mb-4">Tarifs actuels</h4>
+                            <div class="space-y-2 max-h-80 overflow-y-auto" data-mock="true">
+                                <div class="flex justify-between py-2 border-b">
+                                    <span class="text-sm text-gray-700">01 - Alger</span>
+                                    <span class="text-sm font-medium">300 DA</span>
+                                </div>
+                                <div class="flex justify-between py-2 border-b">
+                                    <span class="text-sm text-gray-700">31 - Oran</span>
+                                    <span class="text-sm font-medium">500 DA</span>
+                                </div>
+                                <div class="flex justify-between py-2 border-b">
+                                    <span class="text-sm text-gray-700">25 - Constantine</span>
+                                    <span class="text-sm font-medium">600 DA</span>
+                                </div>
+                                <!-- More delivery prices would be listed here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Add Product Modal -->
+    <div id="add-product-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white rounded-xl max-w-lg w-full">
+                <div class="p-6 border-b">
+                    <div class="flex items-center justify-between">
+                        <h2 class="text-2xl font-bold text-gray-900">Ajouter un produit</h2>
+                        <button id="close-add-product" class="text-gray-400 hover:text-gray-600">
+                            <i class="fas fa-times text-xl"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="p-6">
+                    <form id="add-product-form" class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Nom du produit *</label>
+                            <input type="text" required 
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Description</label>
+                            <textarea 
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                                rows="3"></textarea>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Prix (DA) *</label>
+                            <input type="number" required 
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">URL de l'image *</label>
+                            <input type="url" required 
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                                   placeholder="https://images.unsplash.com/...">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Stock</label>
+                            <input type="number" value="0" 
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                        </div>
+
+                        <button type="submit" 
+                                class="w-full bg-primary hover:bg-primary-dark text-white py-3 rounded-lg font-medium transition-colors">
+                            <i class="fas fa-plus mr-2"></i>Ajouter le produit
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div>
+                    <div class="text-2xl font-bold text-primary mb-4">Pix Store DZ</div>
+                    <p class="text-gray-300 mb-4">Votre destination pour les meilleurs t-shirts en Algérie. Qualité premium, livraison rapide dans toutes les wilayas.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-primary transition-colors"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-primary transition-colors"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-primary transition-colors"><i class="fab fa-twitter"></i></a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="font-bold text-lg mb-4">Navigation</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-300 hover:text-primary transition-colors">Accueil</a></li>
+                        <li><a href="#products" class="text-gray-300 hover:text-primary transition-colors">Produits</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-primary transition-colors">À propos</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-primary transition-colors">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-bold text-lg mb-4">Service Client</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-300 hover:text-primary transition-colors">Livraison</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-primary transition-colors">Retours</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-primary transition-colors">FAQ</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-primary transition-colors">Support</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-bold text-lg mb-4">Contact</h4>
+                    <div class="space-y-2 text-gray-300">
+                        <p><i class="fas fa-phone mr-2"></i>+213 XXX XXX XXX</p>
+                        <p><i class="fas fa-envelope mr-2"></i>contact@pixstoredz.com</p>
+                        <p><i class="fas fa-map-marker-alt mr-2"></i>Alger, Algérie</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; 2024 Pix Store DZ. Tous droits réservés.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+    (function() {
+        // Cart functionality
+        let cart = [];
+        let isLoggedIn = false;
+
+        // Mobile menu toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Filter functionality
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        
+        filterButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                filterButtons.forEach(btn => {
+                    btn.classList.remove('active', 'bg-primary', 'text-white');
+                    btn.classList.add('border-gray-300', 'text-gray-700');
+                });
+                
+                this.classList.add('active', 'bg-primary', 'text-white');
+                this.classList.remove('border-gray-300', 'text-gray-700');
+                
+                // TODO: Implement product filtering logic
+                console.log('Filter by:', this.textContent);
+            });
+        });
+
+        // Add to cart functionality
+        const addToCartButtons = document.querySelectorAll('.add-to-cart');
+        const cartBtn = document.getElementById('cart-btn');
+        const cartCount = document.getElementById('cart-count');
+        
+        addToCartButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const productId = this.dataset.productId;
+                const productCard = this.closest('.product-card');
+                const productName = productCard.querySelector('h3').textContent;
+                const productPrice = productCard.querySelector('.text-2xl').textContent;
+                
+                // Add to cart
+                cart.push({
+                    id: productId,
+                    name: productName,
+                    price: productPrice,
+                    quantity: 1
+                });
+                
+                // Update cart count
+                cartCount.textContent = cart.length;
+                cartCount.classList.remove('hidden');
+                
+                // Show feedback
+                this.innerHTML = '<i class="fas fa-check mr-2"></i>Ajouté';
+                this.classList.add('bg-green-500');
+                
+                setTimeout(() => {
+                    this.innerHTML = '<i class="fas fa-cart-plus mr-2"></i>Ajouter';
+                    this.classList.remove('bg-green-500');
+                }, 2000);
+            });
+        });
+
+        // Checkout modal
+        const checkoutModal = document.getElementById('checkout-modal');
+        const closeCheckout = document.getElementById('close-checkout');
+        const checkoutForm = document.getElementById('checkout-form');
+        const wilayaSelect = document.getElementById('wilaya-select');
+        
+        cartBtn.addEventListener('click', () => {
+            if (cart.length > 0) {
+                updateCheckoutModal();
+                checkoutModal.classList.remove('hidden');
+            } else {
+                alert('Votre panier est vide');
+            }
+        });
+        
+        closeCheckout.addEventListener('click', () => {
+            checkoutModal.classList.add('hidden');
+        });
+
+        // Update checkout modal with cart items
+        function updateCheckoutModal() {
+            const cartItems = document.getElementById('cart-items');
+            const subtotal = document.getElementById('subtotal');
+            
+            cartItems.innerHTML = '';
+            let total = 0;
+            
+            cart.forEach(item => {
+                const price = parseInt(item.price.replace(/[^\d]/g, ''));
+                total += price;
+                
+                cartItems.innerHTML += `
+                    <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                        <div>
+                            <h4 class="font-medium">${item.name}</h4>
+                            <p class="text-sm text-gray-600">Quantité: ${item.quantity}</p>
+                        </div>
+                        <div class="font-bold text-primary">${item.price}</div>
+                    </div>
+                `;
+            });
+            
+            subtotal.textContent = total.toLocaleString() + ' DA';
+            updateTotalCost();
+        }
+
+        // Update total cost with delivery
+        wilayaSelect.addEventListener('change', updateTotalCost);
+        
+        function updateTotalCost() {
+            const subtotal = document.getElementById('subtotal');
+            const deliveryCost = document.getElementById('delivery-cost');
+            const totalCost = document.getElementById('total-cost');
+            
+            const subtotalAmount = parseInt(subtotal.textContent.replace(/[^\d]/g, '')) || 0;
+            const deliveryAmount = parseInt(wilayaSelect.selectedOptions[0]?.dataset.delivery || '0');
+            
+            deliveryCost.textContent = deliveryAmount.toLocaleString() + ' DA';
+            totalCost.textContent = (subtotalAmount + deliveryAmount).toLocaleString() + ' DA';
+        }
+
+        // Handle checkout form submission
+        checkoutForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // TODO: Implement order processing logic
+            alert('Commande confirmée! Nous vous contacterons bientôt.');
+            cart = [];
+            cartCount.textContent = '0';
+            cartCount.classList.add('hidden');
+            checkoutModal.classList.add('hidden');
+        });
+
+        // Admin functionality
+        const loginForm = document.getElementById('login-form');
+        const adminLogin = document.getElementById('admin-login');
+        const adminDashboard = document.getElementById('admin-dashboard');
+        const adminLogout = document.getElementById('admin-logout');
+        
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const email = this.querySelector('input[type="email"]').value;
+            const password = this.querySelector('input[type="password"]').value;
+            
+            // Check credentials
+            if (email === 'cherif.zakaria2019@gmail.com' && password === 'Cmz.0665397175') {
+                isLoggedIn = true;
+                adminLogin.classList.add('hidden');
+                adminDashboard.classList.remove('hidden');
+            } else {
+                alert('Email ou mot de passe incorrect');
+            }
+        });
+        
+        adminLogout.addEventListener('click', () => {
+            isLoggedIn = false;
+            adminLogin.classList.remove('hidden');
+            adminDashboard.classList.add('hidden');
+        });
+
+        // Admin tabs
+        const adminTabs = document.querySelectorAll('.admin-tab');
+        const adminContents = document.querySelectorAll('.admin-content');
+        
+        adminTabs.forEach((tab, index) => {
+            tab.addEventListener('click', () => {
+                adminTabs.forEach(t => {
+                    t.classList.remove('active', 'border-primary', 'text-primary');
+                    t.classList.add('border-transparent', 'text-gray-500');
+                });
+                
+                tab.classList.add('active', 'border-primary', 'text-primary');
+                tab.classList.remove('border-transparent', 'text-gray-500');
+                
+                adminContents.forEach(content => content.classList.add('hidden'));
+                
+                if (index === 0) {
+                    document.getElementById('products-tab').classList.remove('hidden');
+                } else if (index === 1) {
+                    document.getElementById('orders-tab').classList.remove('hidden');
+                } else if (index === 2) {
+                    document.getElementById('delivery-tab').classList.remove('hidden');
+                }
+            });
+        });
+
+        // Add product modal
+        const addProductBtn = document.getElementById('add-product-btn');
+        const addProductModal = document.getElementById('add-product-modal');
+        const closeAddProduct = document.getElementById('close-add-product');
+        const addProductForm = document.getElementById('add-product-form');
+        
+        addProductBtn.addEventListener('click', () => {
+            addProductModal.classList.remove('hidden');
+        });
+        
+        closeAddProduct.addEventListener('click', () => {
+            addProductModal.classList.add('hidden');
+        });
+        
+        addProductForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // TODO: Implement add product logic
+            alert('Produit ajouté avec succès!');
+            addProductModal.classList.add('hidden');
+            this.reset();
+        });
+
+        // Close modals when clicking outside
+        window.addEventListener('click', function(e) {
+            if (e.target === checkoutModal) {
+                checkoutModal.classList.add('hidden');
+            }
+            if (e.target === addProductModal) {
+                addProductModal.classList.add('hidden');
+            }
+        });
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    })();
+    </script>
+</body>
+</html>

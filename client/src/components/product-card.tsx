@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ShoppingCart, Heart, Check } from "lucide-react";
+import { ShoppingCart, Check } from "lucide-react";
 import { Product } from "@shared/schema";
 import { Link } from "wouter";
 
@@ -15,7 +15,9 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
   const [isAdded, setIsAdded] = useState(false);
   const [isImageLoaded, setIsImageLoaded] = useState(false);
 
-  const handleAddToCart = () => {
+  const handleAddToCart = (e: React.MouseEvent) => {
+    e.stopPropagation(); // prevent triggering parent link
+    e.preventDefault();
     onAddToCart(product);
     setIsAdded(true);
     setTimeout(() => setIsAdded(false), 2000);
@@ -29,46 +31,49 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
   const isOutOfStock = product.stock !== null && product.stock <= 0;
 
   return (
-    <Link href={`/product/${product.id}`}>
-      <Card 
-        className="bg-white rounded-xl shadow-md hover:shadow-xl transition-shadow overflow-hidden group cursor-pointer"
-        data-testid={`card-product-${product.id}`}
-      >
-      <div className="relative overflow-hidden">
-        <div className={`w-full h-64 bg-gray-200 ${!isImageLoaded ? 'animate-pulse' : ''}`}>
-          <img
-            src={product.imageUrl}
-            alt={product.name}
-            className={`w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300 ${
-              isImageLoaded ? 'opacity-100' : 'opacity-0'
-            }`}
-            onLoad={() => setIsImageLoaded(true)}
-            onError={() => setIsImageLoaded(true)}
-            data-testid={`img-product-${product.id}`}
-          />
+    <Card 
+      className="bg-white rounded-xl shadow-md hover:shadow-xl transition-shadow overflow-hidden group cursor-pointer"
+      data-testid={`card-product-${product.id}`}
+    >
+      <Link href={`/product/${product.id}`}>
+        <div className="relative overflow-hidden block">
+          <div className={`w-full h-64 bg-gray-200 ${!isImageLoaded ? 'animate-pulse' : ''}`}>
+            <img
+              src={product.imageUrl}
+              alt={product.name}
+              className={`w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300 ${
+                isImageLoaded ? 'opacity-100' : 'opacity-0'
+              }`}
+              onLoad={() => setIsImageLoaded(true)}
+              onError={() => setIsImageLoaded(true)}
+              data-testid={`img-product-${product.id}`}
+            />
+          </div>
+
+          {product.category === "nouveau" && (
+            <Badge className="absolute top-4 left-4 bg-green-500 text-white">
+              Nouveau
+            </Badge>
+          )}
+
+          {isOutOfStock && (
+            <Badge className="absolute top-4 left-4 bg-red-500 text-white">
+              Rupture de stock
+            </Badge>
+          )}
         </div>
-        
-        {product.category === "nouveau" && (
-          <Badge className="absolute top-4 left-4 bg-green-500 text-white">
-            Nouveau
-          </Badge>
-        )}
-        
-        {isOutOfStock && (
-          <Badge className="absolute top-4 left-4 bg-red-500 text-white">
-            Rupture de stock
-          </Badge>
-        )}
-        
-      </div>
+      </Link>
       
       <CardContent className="p-6">
-        <h3 
-          className="font-semibold text-lg text-gray-900 mb-2"
-          data-testid={`text-product-name-${product.id}`}
-        >
-          {product.name}
-        </h3>
+        <Link href={`/product/${product.id}`}>
+          <h3 
+            className="font-semibold text-lg text-gray-900 mb-2"
+            data-testid={`text-product-name-${product.id}`}
+          >
+            {product.name}
+          </h3>
+        </Link>
+
         <p 
           className="text-gray-600 text-sm mb-4"
           data-testid={`text-product-description-${product.id}`}
@@ -115,6 +120,5 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
         )}
       </CardContent>
     </Card>
-    </Link>
   );
 }

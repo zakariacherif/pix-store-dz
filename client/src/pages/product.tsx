@@ -8,8 +8,9 @@ import { ShoppingCart, ArrowLeft, Heart, Truck, Shield, RotateCcw } from "lucide
 import { cartManager } from "@/lib/cart";
 import { CartState } from "@/types";
 import { Product } from "@shared/schema";
-
+import CheckoutModal from "@/components/checkout-modal";
 export default function ProductPage() {
+  const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
   const [, params] = useRoute("/product/:id");
   const [cartState, setCartState] = useState<CartState>(cartManager.getState());
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
@@ -140,7 +141,7 @@ export default function ProductPage() {
                 variant="ghost"
                 size="sm"
                 className="relative"
-                onClick={() => window.location.href = "/"}
+                onClick={() => setIsCheckoutOpen(true)}
                 data-testid="button-cart"
               >
                 <ShoppingCart className="h-5 w-5" />
@@ -328,6 +329,12 @@ export default function ProductPage() {
           </div>
         </div>
       </div>
+       {/* Checkout Modal */}
+            <CheckoutModal
+              isOpen={isCheckoutOpen}
+              onClose={() => setIsCheckoutOpen(false)}
+              cartState={cartState}
+            />
     </div>
   );
 }
