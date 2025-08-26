@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@neondatabase/serverless": "^0.10.4",
+    "cross-env": "^10.0.0",
     "@types/bcrypt": "^6.0.0",
     "@types/memoizee": "^0.4.12",
     "bcrypt": "^6.0.0",
