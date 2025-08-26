@@ -1,10 +1,11 @@
-import { useState, useEffect } from "react";
+no just fix this import { useState, useEffect } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import { Shield, LogOut, Package, ShoppingCart, TrendingUp, Clock } from "lucide-react";
@@ -20,21 +21,21 @@ export default function Admin() {
   const [auth, setAuth] = useState<AdminAuth>({ isAuthenticated: false, admin: null });
   const [loginForm, setLoginForm] = useState({ email: "", password: "" });
 
-  // ✅ FIXED: removed `/api`
+  // Check authentication status
   const { data: adminProfile, isLoading: isCheckingAuth } = useQuery({
-    queryKey: ["/admin/profile"],
+    queryKey: ["/api/admin/profile"],
     retry: false,
     enabled: !auth.isAuthenticated,
   });
 
-  // ✅ FIXED: removed `/api`
+  // Fetch analytics data
   const { data: analytics = { totalProducts: 0, totalOrders: 0, pendingOrders: 0, totalRevenue: 0 } } = useQuery<{
     totalProducts: number;
     totalOrders: number;
     pendingOrders: number;
     totalRevenue: number;
   }>({
-    queryKey: ["/admin/analytics"],
+    queryKey: ["/api/admin/analytics"],
     enabled: auth.isAuthenticated,
   });
 
@@ -45,9 +46,8 @@ export default function Admin() {
   }, [adminProfile]);
 
   const loginMutation = useMutation({
-    // ✅ FIXED: removed `/api`
     mutationFn: async (credentials: { email: string; password: string }) => {
-      const response = await apiRequest("POST", "/admin/login", credentials);
+      const response = await apiRequest("POST", "/api/admin/login", credentials);
       return response.json();
     },
     onSuccess: (data) => {
@@ -56,10 +56,9 @@ export default function Admin() {
         title: "Connexion réussie",
         description: "Bienvenue dans l'administration !",
       });
-      // ✅ FIXED: removed `/api`
-      queryClient.invalidateQueries({ queryKey: ["/admin/profile"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/profile"] });
     },
-    onError: () => {
+    onError: (error) => {
       toast({
         title: "Erreur de connexion",
         description: "Email ou mot de passe incorrect",
@@ -69,9 +68,8 @@ export default function Admin() {
   });
 
   const logoutMutation = useMutation({
-    // ✅ FIXED: removed `/api`
     mutationFn: async () => {
-      const response = await apiRequest("POST", "/admin/logout", {});
+      const response = await apiRequest("POST", "/api/admin/logout", {});
       return response.json();
     },
     onSuccess: () => {
@@ -107,11 +105,11 @@ export default function Admin() {
         <Card className="w-full max-w-md">
           <CardHeader className="text-center">
             <Shield className="h-12 w-12 text-primary mx-auto mb-4" />
-            <CardTitle className="text-2xl">Administration</CardTitle>
+            <CardTitle className="text-2xl" data-testid="text-admin-title">Administration</CardTitle>
             <p className="text-gray-600">Connectez-vous pour gérer votre boutique</p>
           </CardHeader>
           <CardContent>
-            <form onSubmit={handleLogin} className="space-y-4">
+            <form onSubmit={handleLogin} className="space-y-4" data-testid="form-admin-login">
               <div>
                 <Label htmlFor="email">Email</Label>
                 <Input
@@ -121,6 +119,7 @@ export default function Admin() {
                   value={loginForm.email}
                   onChange={(e) => setLoginForm(prev => ({ ...prev, email: e.target.value }))}
                   className="mt-1"
+                  data-testid="input-admin-email"
                 />
               </div>
               <div>
@@ -132,12 +131,14 @@ export default function Admin() {
                   value={loginForm.password}
                   onChange={(e) => setLoginForm(prev => ({ ...prev, password: e.target.value }))}
                   className="mt-1"
+                  data-testid="input-admin-password"
                 />
               </div>
               <Button 
                 type="submit" 
                 className="w-full bg-primary hover:bg-primary-dark"
                 disabled={loginMutation.isPending}
+                data-testid="button-admin-login"
               >
                 {loginMutation.isPending ? "Connexion..." : "Se connecter"}
               </Button>
@@ -155,19 +156,20 @@ export default function Admin() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">
+              <h1 className="text-2xl font-bold text-gray-900" data-testid="text-dashboard-title">
                 Tableau de bord
               </h1>
               <p className="text-gray-600">Gérez vos produits et commandes</p>
             </div>
             <div className="flex items-center space-x-4">
-              <span className="text-sm text-gray-600">
+              <span className="text-sm text-gray-600" data-testid="text-admin-email">
                 {auth.admin?.email}
               </span>
               <Button
                 variant="ghost"
                 onClick={handleLogout}
                 disabled={logoutMutation.isPending}
+                data-testid="button-admin-logout"
               >
                 <LogOut className="h-4 w-4 mr-2" />
                 Déconnexion
@@ -185,7 +187,7 @@ export default function Admin() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-blue-200 text-sm">Total Produits</p>
-                  <p className="text-3xl font-bold">{analytics.totalProducts}</p>
+                  <p className="text-3xl font-bold" data-testid="text-stat-products">{analytics.totalProducts}</p>
                 </div>
                 <Package className="h-8 w-8 text-blue-200" />
               </div>
@@ -197,19 +199,19 @@ export default function Admin() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-green-200 text-sm">Commandes</p>
-                  <p className="text-3xl font-bold">{analytics.totalOrders}</p>
+                  <p className="text-3xl font-bold" data-testid="text-stat-orders">{analytics.totalOrders}</p>
                 </div>
                 <ShoppingCart className="h-8 w-8 text-green-200" />
               </div>
             </CardContent>
           </Card>
 
-          <Card className="bg-gradient-to-r from-primary to-orange-400 text-white">
+          <Card className="bg-gradient-to-r from-primary to-orange-light text-white">
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-orange-200 text-sm">Revenus</p>
-                  <p className="text-3xl font-bold">{analytics.totalRevenue.toLocaleString()} DA</p>
+                  <p className="text-3xl font-bold" data-testid="text-stat-revenue">{analytics.totalRevenue.toLocaleString()} DA</p>
                 </div>
                 <TrendingUp className="h-8 w-8 text-orange-200" />
               </div>
@@ -221,7 +223,7 @@ export default function Admin() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-purple-200 text-sm">En attente</p>
-                  <p className="text-3xl font-bold">{analytics.pendingOrders}</p>
+                  <p className="text-3xl font-bold" data-testid="text-stat-pending">{analytics.pendingOrders}</p>
                 </div>
                 <Clock className="h-8 w-8 text-purple-200" />
               </div>
@@ -232,16 +234,32 @@ export default function Admin() {
         {/* Main Content */}
         <Tabs defaultValue="products" className="space-y-6">
           <TabsList className="bg-white p-1 rounded-lg shadow-sm">
-            <TabsTrigger value="products" className="data-[state=active]:bg-primary data-[state=active]:text-white">
+            <TabsTrigger 
+              value="products" 
+              className="data-[state=active]:bg-primary data-[state=active]:text-white"
+              data-testid="tab-products"
+            >
               Produits
             </TabsTrigger>
-            <TabsTrigger value="orders" className="data-[state=active]:bg-primary data-[state=active]:text-white">
+            <TabsTrigger 
+              value="orders" 
+              className="data-[state=active]:bg-primary data-[state=active]:text-white"
+              data-testid="tab-orders"
+            >
               Commandes
             </TabsTrigger>
-            <TabsTrigger value="delivery" className="data-[state=active]:bg-primary data-[state=active]:text-white">
+            <TabsTrigger 
+              value="delivery" 
+              className="data-[state=active]:bg-primary data-[state=active]:text-white"
+              data-testid="tab-delivery"
+            >
               Tarifs Livraison
             </TabsTrigger>
-            <TabsTrigger value="categories" className="data-[state=active]:bg-primary data-[state=active]:text-white">
+            <TabsTrigger 
+              value="categories" 
+              className="data-[state=active]:bg-primary data-[state=active]:text-white"
+              data-testid="tab-categories"
+            >
               Catégories
             </TabsTrigger>
           </TabsList>
