@@ -1,7 +1,8 @@
-import 'dotenv/config';
+import "dotenv/config";
 import express, { type Request, Response, NextFunction } from "express";
 import cors from "cors";
-import session from 'express-session';
+import session from "express-session";
+import pgSession from "connect-pg-simple";
 import { registerRoutes } from "./routes";
 import { setupVite, log } from "./vite";
 
@@ -15,24 +16,37 @@ export const db = drizzle(sql);
 const app = express();
 
 // ===== CORS =====
-app.use(cors({
-  origin: process.env.NODE_ENV === 'production'
-    ? 'https://pix-store-dz.vercel.app'
-    : 'http://localhost:5173',
-  credentials: true
-}));
+app.use(
+  cors({
+    origin:
+      process.env.NODE_ENV === "production"
+        ? "https://pix-store-dz.vercel.app"
+        : "http://localhost:5173",
+    credentials: true,
+  })
+);
 
-// ===== Session (⚠️ MemoryStore not for prod, better to use connect-pg-simple) =====
-app.use(session({
-  secret: process.env.SESSION_SECRET || 'your-secret-key',
-  resave: false,
-  saveUninitialized: false,
-  cookie: {
-    secure: process.env.NODE_ENV === "production", // true if HTTPS
-    httpOnly: true,
-    sameSite: 'lax'
-  }
-}));
+// ===== Session Store =====
+const PgSession = pgSession(session);
+
+app.use(
+  session({
+    store:
+      process.env.NODE_ENV === "production"
+        ? new PgSession({
+            conString: process.env.DATABASE_URL!,
+          })
+        : undefined, // MemoryStore only in dev
+    secret: process.env.SESSION_SECRET || "your-secret-key",
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      secure: process.env.NODE_ENV === "production", // only over HTTPS in prod
+      httpOnly: true,
+      sameSite: "lax",
+    },
+  })
+);
 
 // ===== Parsers =====
 app.use(express.json());
@@ -82,16 +96,18 @@ app.use((req, res, next) => {
   if (app.get("env") === "development") {
     await setupVite(app, server);
   } else {
-    console.log("Production mode: Frontend is hosted on Vercel, not serving static files");
+    console.log(
+      "Production mode: Frontend is hosted on Vercel, not serving static files"
+    );
 
-    // health check
+    // Health check
     app.get("/health", (_req, res) => {
       res.json({ status: "OK", message: "Backend server is running" });
     });
   }
 
   // ===== PORT Binding (important for Render) =====
-  const port = parseInt(process.env.PORT || '5000', 10);
+  const port = parseInt(process.env.PORT || "5000", 10);
   server.listen(port, "0.0.0.0", () => {
     log(`🚀 Server running on port ${port}`);
   });
