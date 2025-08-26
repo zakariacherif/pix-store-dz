@@ -41,6 +41,7 @@ export interface IStorage {
 
   // Admin
   getAdminByEmail(email: string): Promise<Admin | undefined>;
+  getAdminById(id: string): Promise<Admin | undefined>; // ← ADDED THIS METHOD
   createAdmin(admin: InsertAdmin): Promise<Admin>;
 
   // Categories
@@ -207,6 +208,12 @@ export class DatabaseStorage implements IStorage {
   // Admin
   async getAdminByEmail(email: string): Promise<Admin | undefined> {
     const [admin] = await db.select().from(admins).where(eq(admins.email, email));
+    return admin;
+  }
+
+  // ADDED THIS METHOD - CRITICAL FOR FIXING LOGIN
+  async getAdminById(id: string): Promise<Admin | undefined> {
+    const [admin] = await db.select().from(admins).where(eq(admins.id, id));
     return admin;
   }
 
