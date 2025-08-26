@@ -4,7 +4,7 @@ import path from "path";
 
 export default defineConfig({
   plugins: [react()],
-  
+
   root: process.cwd(),
 
   resolve: {
@@ -24,5 +24,14 @@ export default defineConfig({
       strict: true,
       deny: ["**/.*"],
     },
+    // 👇 important for SPA routing during local dev
+    historyApiFallback: true,
+  },
+
+  // 👇 this ensures Vercel (production) serves index.html for unknown routes
+  preview: {
+    port: 4173,
+    strictPort: true,
+    historyApiFallback: true,
   },
 });
