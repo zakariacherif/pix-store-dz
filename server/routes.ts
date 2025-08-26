@@ -256,9 +256,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
     });
   });
 
+  // FIXED: Use the admin ID from session instead of hardcoded email
   app.get("/api/admin/profile", isAuthenticated, async (req: any, res) => {
     try {
-      const admin = await storage.getAdminByEmail("cherif.zakaria2019@gmail.com");
+      const admin = await storage.getAdminById(req.session.adminId);
+      
       if (!admin) {
         return res.status(404).json({ message: "Admin not found" });
       }
