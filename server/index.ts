@@ -4,10 +4,14 @@ import cors from "cors";
 import session from 'express-session';
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
+
 const app = express();
 
+// CORS configuration - UPDATED to include your Vercel frontend
 app.use(cors({
-  origin: 'http://localhost:5173',
+  origin: process.env.NODE_ENV === 'production' 
+    ? 'https://pix-store-dz.vercel.app'
+    : 'http://localhost:5173',
   credentials: true
 }));
 
