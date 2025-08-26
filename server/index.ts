@@ -18,11 +18,11 @@ const app = express();
 // ===== CORS =====
 app.use(
   cors({
-    origin:
-      process.env.NODE_ENV === "production"
-        ? "https://pix-store-dz.vercel.app"
-        : "http://localhost:5173",
-    credentials: true,
+    origin: [
+      "https://pix-store-dz.vercel.app", // frontend on Vercel
+      "http://localhost:5173",           // local dev
+    ],
+    credentials: true, // allows cookies to be sent
   })
 );
 
@@ -43,7 +43,7 @@ app.use(
     cookie: {
       secure: process.env.NODE_ENV === "production", // only over HTTPS in prod
       httpOnly: true,
-      sameSite: "lax",
+      sameSite: "none", // 👈 important for cross-origin cookies (Vercel ↔ Render)
     },
   })
 );
