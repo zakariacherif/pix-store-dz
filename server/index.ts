@@ -6,12 +6,8 @@ import pgSession from "connect-pg-simple";
 import { registerRoutes } from "./routes";
 import { setupVite, log } from "./vite";
 
-// ===== Database (Drizzle + Neon) =====
-import { drizzle } from "drizzle-orm/neon-serverless";
-import { neon } from "@neondatabase/serverless";
-
-const sql = neon(process.env.DATABASE_URL!);
-export const db = drizzle(sql);
+// ===== Database - Use consistent import =====
+import { db } from "./db"; // Import from your central db.ts file
 
 const app = express();
 
@@ -35,6 +31,7 @@ app.use(
       process.env.NODE_ENV === "production"
         ? new PgSession({
             conString: process.env.DATABASE_URL!,
+            createTableIfMissing: true, // Add this to auto-create sessions table
           })
         : undefined, // MemoryStore only in dev
     secret: process.env.SESSION_SECRET || "your-secret-key",
@@ -43,7 +40,8 @@ app.use(
     cookie: {
       secure: process.env.NODE_ENV === "production", // only over HTTPS in prod
       httpOnly: true,
-      sameSite: "none", // 👈 important for cross-origin cookies (Vercel ↔ Render)
+      sameSite: "none", // important for cross-origin cookies (Vercel ↔ Render)
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 1 week
     },
   })
 );
