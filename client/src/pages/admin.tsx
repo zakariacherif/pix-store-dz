@@ -5,8 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { Badge } from "@/components/ui/badge";
-import { useToast } from "@/hooks/use-toast";
+import { useToast } from "@/components/ui/use-toast"; // Fixed import for useToast
 import { apiRequest } from "@/lib/queryClient";
 import { Shield, LogOut, Package, ShoppingCart, TrendingUp, Clock } from "lucide-react";
 import ProductForm from "@/components/admin/product-form";
